@@ -1,0 +1,68 @@
+# Schneider Electric D-Life icons: the 54 the "Push Button Dynamic Labelling" display
+# can show (ETS app 1871, "Icon for status on/off"; `ets` is the parameter value),
+# plus one insert-only icon (message) that the Pro T push-button inserts carry.
+#
+# `file` is the picture's name inside Schneider's ETS product data
+# (M-0064/Baggages/Icon_Product_preview.zip in a .knxproj). The pictures are
+# Schneider's and are not in this repository: `tools/schneider_icons.py` copies
+# them from your own project file into Home Assistant, and the page uses them
+# when they are there. `mdi` is the look-alike shown when they aren't.
+id: schneider_dlife
+name: Schneider D-Life
+icons:
+  - {id: bulb_on, name: Bulb on, ets: 1, file: 01_Bulb_On.png, mdi: "mdi:lightbulb-on-outline"}
+  - {id: bulb_off, name: Bulb off, ets: 2, file: 02_Bulb_off.png, mdi: "mdi:lightbulb-outline"}
+  - {id: spot_lamp, name: Spot lamp, ets: 3, file: 03_Spot lamp.png, mdi: "mdi:spotlight-beam"}
+  - {id: floor_lamp, name: Floor lamp, ets: 4, file: 04_Floor lamp.png, mdi: "mdi:lamp-outline"}
+  - {id: ceiling_lamp, name: Ceiling lamp, ets: 5, file: 05_Ceiling lamp.png, mdi: "mdi:ceiling-light-outline"}
+  - {id: outdoor_lamp, name: Outdoor lamp, ets: 6, file: 06_Outdoor lamp.png, mdi: "mdi:outdoor-lamp"}
+  - {id: dimming, name: Dimming, ets: 7, file: 07_Dimming.png, mdi: "mdi:lightbulb-on-50"}
+  - {id: blind, name: Blind, ets: 8, file: 08_blind.png, mdi: "mdi:roller-shade"}
+  - {id: blind_down, name: Blind down, ets: 9, file: 09_blind down.png, mdi: "mdi:roller-shade-closed"}
+  - {id: blind_up, name: Blind up, ets: 10, file: 10_blind up.png, mdi: "mdi:roller-shade"}
+  - {id: shutter, name: Shutter, ets: 11, file: 11_shutter.png, mdi: "mdi:window-shutter"}
+  - {id: shutter_up, name: Shutter up, ets: 12, file: 12_shutter up.png, mdi: "mdi:window-shutter-open"}
+  - {id: shutter_down, name: Shutter down, ets: 13, file: 13_shutter down.png, mdi: "mdi:window-shutter"}
+  - {id: radiator, name: Radiator, ets: 14, file: 14_radiator.png, mdi: "mdi:radiator"}
+  - {id: floor_heating, name: Floor heating, ets: 15, file: 15_floor heating.png, mdi: "mdi:heating-coil"}
+  - {id: standby, name: Standby, ets: 16, file: 16_standby.png, mdi: "mdi:power"}
+  - {id: up, name: Up, ets: 17, file: 17_Up.png, mdi: "mdi:chevron-up"}
+  - {id: down, name: Down, ets: 18, file: 18_down.png, mdi: "mdi:chevron-down"}
+  - {id: "off", name: "Off", ets: 19, file: 19_off.png, mdi: "mdi:circle-outline"}
+  - {id: "on", name: "On", ets: 20, file: 20_on.png, mdi: "mdi:power-on"}
+  - {id: right, name: Right, ets: 21, file: "21_right .png", mdi: "mdi:chevron-right"}
+  - {id: left, name: Left, ets: 22, file: 22_left.png, mdi: "mdi:chevron-left"}
+  - {id: lock, name: Lock, ets: 23, file: 23_Lock.png, mdi: "mdi:lock-outline"}
+  - {id: unlock, name: Unlock, ets: 24, file: 24_unlock.png, mdi: "mdi:lock-open-variant-outline"}
+  - {id: do_not_disturb, name: Do not disturb, ets: 25, file: 25_do not disturb.png, mdi: "mdi:minus-circle-outline"}
+  - {id: presentation, name: Presentation, ets: 26, file: 26_Presentation.png, mdi: "mdi:human-male-board"}
+  - {id: back_home, name: Back home, ets: 27, file: 27_Back home.png, mdi: "mdi:home-account"}
+  - {id: leave_home, name: Leave home, ets: 28, file: 28_Leave home.png, mdi: "mdi:exit-run"}
+  - {id: entertainment, name: Entertainment, ets: 29, file: 29_Entertainment.png, mdi: "mdi:television-classic"}
+  - {id: cleaning, name: Cleaning, ets: 30, file: 30_Cleaning.png, mdi: "mdi:vacuum-outline"}
+  - {id: music, name: Music, ets: 31, file: 31_music.png, mdi: "mdi:music"}
+  - {id: dining, name: Dining, ets: 32, file: 32_dining.png, mdi: "mdi:silverware-fork-knife"}
+  - {id: working, name: Working, ets: 33, file: 33_working.png, mdi: "mdi:laptop"}
+  - {id: night, name: Night, ets: 34, file: 34_night.png, mdi: "mdi:weather-night"}
+  - {id: celebration, name: Celebration, ets: 35, file: 35_celebration.png, mdi: "mdi:glass-wine"}
+  - {id: gaming, name: Gaming, ets: 36, file: 36_gaming.png, mdi: "mdi:controller-classic-outline"}
+  - {id: green_mode, name: Green mode, ets: 37, file: 37_green mode.png, mdi: "mdi:leaf"}
+  - {id: robot, name: Robot, ets: 38, file: 38_robot.png, mdi: "mdi:robot-vacuum"}
+  - {id: socket, name: Socket, ets: 39, file: 39_socket.png, mdi: "mdi:power-socket-eu"}
+  - {id: laundry, name: Laundry, ets: 40, file: 40_Laundry.png, mdi: "mdi:basket-outline"}
+  - {id: curtain_open, name: Curtain open, ets: 41, file: 41_Curtain open.png, mdi: "mdi:curtains"}
+  - {id: curtain_close, name: Curtain close, ets: 42, file: 42_Curtain close.png, mdi: "mdi:curtains-closed"}
+  - {id: decrease, name: Decrease, ets: 43, file: 43_Decrease.png, mdi: "mdi:minus"}
+  - {id: increase, name: Increase, ets: 44, file: 44_Increase.png, mdi: "mdi:plus"}
+  - {id: number_0, name: Number 0, ets: 45, file: 45_number0.png, mdi: "mdi:numeric-0"}
+  - {id: number_1, name: Number 1, ets: 46, file: 46_number1.png, mdi: "mdi:numeric-1"}
+  - {id: number_2, name: Number 2, ets: 47, file: 47_number2.png, mdi: "mdi:numeric-2"}
+  - {id: number_3, name: Number 3, ets: 48, file: 48_number3.png, mdi: "mdi:numeric-3"}
+  - {id: number_4, name: Number 4, ets: 49, file: 49_number4.png, mdi: "mdi:numeric-4"}
+  - {id: number_5, name: Number 5, ets: 50, file: 50_number5.png, mdi: "mdi:numeric-5"}
+  - {id: number_6, name: Number 6, ets: 51, file: 51_number6.png, mdi: "mdi:numeric-6"}
+  - {id: number_7, name: Number 7, ets: 52, file: 52_number7.png, mdi: "mdi:numeric-7"}
+  - {id: number_8, name: Number 8, ets: 53, file: 53_number8.png, mdi: "mdi:numeric-8"}
+  - {id: number_9, name: Number 9, ets: 54, file: 54_number9.png, mdi: "mdi:numeric-9"}
+  # Insert-only: on the Pro T push-button insert sheets, not on the display.
+  - {id: message, name: Message, mdi: "mdi:message-text-outline"}

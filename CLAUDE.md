@@ -1,0 +1,105 @@
+# Button Blueprinter: notes for Claude Code
+
+Home Assistant custom integration (domain `button_blueprinter`). Shows
+every physical switch room by room and sets what each button does. Sibling of
+`olig89/room-routines`, `olig89/scene-setter` and `olig89/watt-window`: same
+conventions. Notes about one particular install (where it runs, the test
+setup on this machine, the design notes) live in `CLAUDE.local.md`, which is
+not in git.
+
+**This repository is public: no household data.** Tests, docs, examples and
+commit messages use generic stand-ins (an "Office", a user "Alex",
+`MyHouse.knxproj`, made-up KNX and Zigbee addresses), never a real home's
+names, people, addresses or automations.
+
+## Layout
+
+- `custom_components/button_blueprinter/`
+  - `__init__.py`: setup, the `press` action, the sidebar page (`require_admin=False`).
+  - `blueprinter.py`: `Blueprinter`, all the work: loads models and switches
+    (`.storage/button_blueprinter`), listens (KNX via `async_initialize_triggers`
+    with `knx.telegram`, event entities via state changes, Zigbee2MQTT
+    devices via their own MQTT topic), times raw presses,
+    runs bindings as `Script`s, drives LEDs (`knx.send`), keeps the press log.
+  - `websocket.py`: `subscribe`, `set_binding`, `test`, `request_look` (anyone);
+    `save_switch`, `delete_switch`, `set_mode`, `import`, `export`, `suggest`,
+    `apply_looks`, `finish_request` (admins). **Rights are checked here, never only on the page.**
+  - `core/`: **no Home Assistant imports** (CI greps for this).
+    `gestures.py` the vocabulary; `models.py` model files; `switches.py`
+    switches and their checks; `timing.py` tap / double / hold from raw
+    presses; `translate.py` device events to gestures; `palette.py` the safe
+    menu and its HA actions; `knx.py` addresses and reading old automations;
+    `export.py` a switch as a plain automation.
+  - `models/*.yaml`: one file per switch model. The file name is the id.
+  - `icon_sets/*.yaml`: icons a model is limited to (`icons: {set, only}`); a model
+    with `display:` (the MTN6194) has per-state looks: label, show, icon_on/off,
+    colour_on/off. `core/icons.py` loads sets; `core/switches.py::check_looks` enforces them.
+  - `core/requests.py`: looks only ETS or an insert can give. A switch's `looks`
+    are what the plate shows now; `wanted` holds requests (`look`, `by`, `at`)
+    and `steps()` words them as ETS settings. `apply_looks` ticks off requests
+    the plate now matches.
+- `tools/schneider_icons.py`: copies Schneider's icon pictures from a .knxproj
+  (they are Schneider's: **never commit them**; `.gitignore` has the folder).
+- `tools/ets_looks.py`: the MTN6194 plates' looks from ETS, for `apply_looks`.
+  - `www/button-blueprinter.js`: the page. Plain web component, no build step.
+  - `strings.json` and `translations/en.json` must be identical (a test checks).
+- `tests/core` (no HA needed), `tests/integration` (real HA test harness).
+
+## Rules that must hold
+
+- **Non-admins may only set menu bindings**, and may not replace or clear a
+  binding an admin wrote by hand. A free-form action runs with full rights.
+- A gesture marked **fixed** (handled outside HA, e.g. a KNX-direct fallback
+  hold) never has a binding.
+- **New switches start in a dry run.** Dry run logs "would run" and runs
+  nothing, sends no LEDs and answers no LED reads (an old automation may still
+  be doing that).
+- Two switches may not share a KNX address, an event entity or a Zigbee2MQTT device.
+- An event entity's state restored at start-up (`old_state` None) or coming
+  back from `unavailable` is not a press. Neither is an attribute-only change.
+- A tap only waits for a possible double tap if that control has a double-tap
+  binding.
+- Turns: `steps` is passed to the run as a variable; menu items scale by it.
+- **Put back is opt-in per switch** (`put_back`, `core/putback.py`); nothing
+  listens or is stored for a switch without it. A light is the switch's while
+  its changes carry the contexts of the switch's runs; any other change gives
+  it up. "Put things back now" is only allowed on a switch that has it.
+- The Nuimo's turns arrive in 80 ms batches and can land after a later press:
+  the ring and the top are separate controls, never combined into one gesture.
+- In YAML, quote `on`, `off`, `yes`, `no` (also as names): unquoted they load as
+  true/false and an icon silently disappears.
+- On the Schneider plates `looks` only change from ETS (`apply_looks`) or an
+  admin's "It's done"; everyone else asks (`request_look`). The page must never
+  draw a requested look as if it were on the plate.
+- The page uses no `alert()`: the desktop app's browser pane can't show one and
+  it blocks the redraw. Say things inline.
+- Version in three places, a test checks: `manifest.json`, `const.py`,
+  `www/button-blueprinter.js` (`PAGE_VERSION`).
+
+## Testing
+
+Core only (no Home Assistant needed; works on Windows):
+
+    PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/core -q -p no:cacheprovider
+
+Everything needs Linux or WSL and a venv with `requirements_test.txt`
+(the Home Assistant test harness). `.wsl-test.sh` runs the suite from the repo
+folder with the venv in `$BB_VENV` (default `~/.venv`):
+
+    BB_VENV=~/my-ha-venv bash .wsl-test.sh -q -p no:logging
+
+`test_real_knx_trigger_delivers_presses` runs the KNX integration's real
+trigger code when `xknx` is installed in that venv, and skips otherwise.
+HA validators raise `probatio` errors in 2026.9+, not `vol.Invalid`: catch
+broadly where actions are validated. Configure a running install through the
+websocket commands, never by editing `.storage`.
+
+## Not done yet
+
+- Hand-written actions are edited as JSON on the page; YAML would be nicer.
+- The press log is in memory only (lost on restart).
+- `[to check]` in the model files: Hue Tap dial steps per click and button
+  corners; BILRESA dual button entity ids; Nuimo delta per click.
+- No per-switch "last press" entity yet; no LED matrix output for the Nuimo
+  yet (`nuimo.show` exists).
+- No JavaScript tests.

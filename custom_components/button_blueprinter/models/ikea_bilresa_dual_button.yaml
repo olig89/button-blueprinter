@@ -1,0 +1,30 @@
+# IKEA BILRESA remote with dual button (E2489), through the ha-ikea-bilresa
+# integration (v0.6.0 and later): one event entity per button, with press,
+# double_press, hold, release.
+# [to check once paired] the entity ids; "_button_1" / "_button_2" is a guess.
+id: ikea_bilresa_dual_button
+name: BILRESA dual button
+maker: IKEA
+input: event_entity
+picture: {width: 50, height: 90, radius: 10, colour: "#e9e4d8", ink: "#4a4a4a"}
+looks: [label, icon]
+controls:
+  - {id: b1, name: Top button,    shape: rect, x: 5, y: 5,  w: 40, h: 38, gestures: [press, double_press, long_press, long_press_release]}
+  - {id: b2, name: Bottom button, shape: rect, x: 5, y: 47, w: 40, h: 38, gestures: [press, double_press, long_press, long_press_release]}
+entities:
+  - slot: button_1
+    name: Button 1
+    find: "_button_1$"
+    events:
+      press: {control: b1, gesture: press}
+      double_press: {control: b1, gesture: double_press}
+      hold: {control: b1, gesture: long_press}
+      release: {control: b1, gesture: long_press_release}
+  - slot: button_2
+    name: Button 2
+    find: "_button_2$"
+    events:
+      press: {control: b2, gesture: press}
+      double_press: {control: b2, gesture: double_press}
+      hold: {control: b2, gesture: long_press}
+      release: {control: b2, gesture: long_press_release}

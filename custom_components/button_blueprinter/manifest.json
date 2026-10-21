@@ -1,0 +1,25 @@
+{
+  "domain": "button_blueprinter",
+  "name": "Button Blueprinter",
+  "after_dependencies": [
+    "frontend",
+    "panel_custom",
+    "knx",
+    "mqtt"
+  ],
+  "codeowners": [
+    "@olig89"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http",
+    "websocket_api"
+  ],
+  "documentation": "https://github.com/olig89/button-blueprinter",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/olig89/button-blueprinter/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.7.2"
+}

@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+button_blueprinter_icons/
+CLAUDE.local.md

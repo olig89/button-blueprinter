@@ -1,0 +1,61 @@
+# IKEA BILRESA scroll wheel (E2490), through the ha-ikea-bilresa integration
+# (Vituhlos/ha-ikea-bilresa): one event entity per channel, with rotate_up /
+# rotate_down (attribute "notches"), press, double_press, triple_press, hold, release.
+# The channel selector on the wheel sends nothing; each channel is its own control.
+# Don't also give a channel a binding in the plugin's own page.
+# Checked on a real install 2026-10-08 (plugin v0.6.0-rc.17): one device (core Matter's)
+# carries both Matter's own event.*_button_1..9 and the plugin's
+# event.*_channel_1..3; the patterns below pick only the channels. The plugin's
+# per-channel switch (flipped by each press) and dial number are passive helpers
+# and switch nothing, so they don't double up with Button Blueprinter.
+id: ikea_bilresa_scroll_wheel
+name: BILRESA scroll wheel
+maker: IKEA
+input: event_entity
+picture:
+  width: 60
+  height: 110
+  radius: 28
+  colour: "#e9e4d8"
+  ink: "#4a4a4a"
+  decor:
+    - {shape: circle, cx: 30, cy: 38, r: 24}
+looks: [label, icon]
+controls:
+  - {id: channel_1, name: Channel 1, shape: circle, cx: 16, cy: 86, r: 8, gestures: [press, double_press, triple_press, long_press, long_press_release, turn_right, turn_left]}
+  - {id: channel_2, name: Channel 2, shape: circle, cx: 30, cy: 86, r: 8, gestures: [press, double_press, triple_press, long_press, long_press_release, turn_right, turn_left]}
+  - {id: channel_3, name: Channel 3, shape: circle, cx: 44, cy: 86, r: 8, gestures: [press, double_press, triple_press, long_press, long_press_release, turn_right, turn_left]}
+entities:
+  - slot: channel_1
+    name: Channel 1
+    find: "_channel_1$"
+    events:
+      rotate_up: {control: channel_1, gesture: turn_right, steps: notches}
+      rotate_down: {control: channel_1, gesture: turn_left, steps: notches}
+      press: {control: channel_1, gesture: press}
+      double_press: {control: channel_1, gesture: double_press}
+      triple_press: {control: channel_1, gesture: triple_press}
+      hold: {control: channel_1, gesture: long_press}
+      release: {control: channel_1, gesture: long_press_release}
+  - slot: channel_2
+    name: Channel 2
+    find: "_channel_2$"
+    events:
+      rotate_up: {control: channel_2, gesture: turn_right, steps: notches}
+      rotate_down: {control: channel_2, gesture: turn_left, steps: notches}
+      press: {control: channel_2, gesture: press}
+      double_press: {control: channel_2, gesture: double_press}
+      triple_press: {control: channel_2, gesture: triple_press}
+      hold: {control: channel_2, gesture: long_press}
+      release: {control: channel_2, gesture: long_press_release}
+  - slot: channel_3
+    name: Channel 3
+    find: "_channel_3$"
+    events:
+      rotate_up: {control: channel_3, gesture: turn_right, steps: notches}
+      rotate_down: {control: channel_3, gesture: turn_left, steps: notches}
+      press: {control: channel_3, gesture: press}
+      double_press: {control: channel_3, gesture: double_press}
+      triple_press: {control: channel_3, gesture: triple_press}
+      hold: {control: channel_3, gesture: long_press}
+      release: {control: channel_3, gesture: long_press_release}

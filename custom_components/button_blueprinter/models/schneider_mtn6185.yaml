@@ -1,0 +1,26 @@
+# Schneider Electric D-Life Pushbuttons KNX Pro T, 4 buttons (MTN6185, anthracite).
+# Two by two. ETS swaps two functions on this plate: physical button 2 (bottom
+# left) is Function 3 and button 3 (top right) is Function 2. The numbering here
+# used here is button 2 = bottom left; the offsets follow the addresses.
+id: schneider_mtn6185
+name: D-Life Pushbuttons Pro T, 4 buttons
+maker: Schneider Electric
+input: knx
+picture: {width: 86, height: 86, radius: 6, colour: "#3a3b3d", ink: "#f2f2f2"}
+knx:
+  tap: tap
+  hold: long_press
+  led: led
+# Each button takes a printed insert from Schneider's four insert sheets
+# (6 icons each). `label` is a note for this page only; the plate has no text.
+looks: [label, icon]
+icons:
+  set: schneider_dlife
+  only: [floor_lamp, spot_lamp, bulb_off, ceiling_lamp, bulb_on, "off", cleaning, "on", do_not_disturb, up,
+         down, shutter_up, shutter, shutter_down, message, presentation, standby, entertainment,
+         back_home, leave_home]
+controls:
+  - {id: b1, name: Button 1, shape: rect, x: 6,  y: 6,  w: 35, h: 35, knx: 0, gestures: [press, double_press, long_press]}
+  - {id: b3, name: Button 3, shape: rect, x: 45, y: 6,  w: 35, h: 35, knx: 2, gestures: [press, double_press, long_press]}
+  - {id: b2, name: Button 2, shape: rect, x: 6,  y: 45, w: 35, h: 35, knx: 1, gestures: [press, double_press, long_press]}
+  - {id: b4, name: Button 4, shape: rect, x: 45, y: 45, w: 35, h: 35, knx: 3, gestures: [press, double_press, long_press]}

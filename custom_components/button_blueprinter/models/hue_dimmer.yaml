@@ -1,0 +1,47 @@
+# Philips Hue Dimmer switch (v1 and v2), through the Hue integration's event entities.
+# Each button: initial_press, repeat, short_release, long_press, long_release.
+# Clear the switch's own setup in the Hue app, or each press runs twice.
+id: hue_dimmer
+name: Hue Dimmer switch
+maker: Philips Hue
+input: event_entity
+picture: {width: 36, height: 92, radius: 7, colour: "#f3f3f1", ink: "#444444"}
+looks: [label, icon]
+controls:
+  - {id: top,    name: Top button,    shape: rect, x: 4, y: 4,  w: 28, h: 26, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: up,     name: Up button,     shape: rect, x: 4, y: 32, w: 28, h: 18, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: down,   name: Down button,   shape: rect, x: 4, y: 52, w: 28, h: 18, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: bottom, name: Bottom button, shape: rect, x: 4, y: 72, w: 28, h: 16, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+entities:
+  - slot: button_1
+    name: Button 1 (top)
+    find: "_button_1$"
+    events:
+      short_release: {control: top, raw: tap}
+      long_press: {control: top, gesture: long_press}
+      repeat: {control: top, gesture: long_press_repeat}
+      long_release: {control: top, gesture: long_press_release}
+  - slot: button_2
+    name: Button 2 (up)
+    find: "_button_2$"
+    events:
+      short_release: {control: up, raw: tap}
+      long_press: {control: up, gesture: long_press}
+      repeat: {control: up, gesture: long_press_repeat}
+      long_release: {control: up, gesture: long_press_release}
+  - slot: button_3
+    name: Button 3 (down)
+    find: "_button_3$"
+    events:
+      short_release: {control: down, raw: tap}
+      long_press: {control: down, gesture: long_press}
+      repeat: {control: down, gesture: long_press_repeat}
+      long_release: {control: down, gesture: long_press_release}
+  - slot: button_4
+    name: Button 4 (bottom)
+    find: "_button_4$"
+    events:
+      short_release: {control: bottom, raw: tap}
+      long_press: {control: bottom, gesture: long_press}
+      repeat: {control: bottom, gesture: long_press_repeat}
+      long_release: {control: bottom, gesture: long_press_release}

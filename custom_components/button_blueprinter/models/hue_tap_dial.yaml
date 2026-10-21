@@ -1,0 +1,55 @@
+# Philips Hue Tap dial switch, through the Hue integration's event entities: four
+# buttons and a rotary entity (clock_wise / counter_clock_wise, with "steps").
+# [to check on the device] how many Hue "steps" one click of the dial is; 15 is a guess.
+# [to check] which corner each button number is.
+id: hue_tap_dial
+name: Hue Tap dial switch
+maker: Philips Hue
+input: event_entity
+picture: {width: 90, height: 90, radius: 14, colour: "#f3f3f1", ink: "#444444"}
+looks: [label, icon]
+controls:
+  - {id: dial, name: Dial,     shape: ring,   cx: 45, cy: 45, r: 42, inner: 33, gestures: [turn_right, turn_left]}
+  - {id: b1,   name: Button 1, shape: circle, cx: 33, cy: 33, r: 10, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: b2,   name: Button 2, shape: circle, cx: 57, cy: 33, r: 10, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: b3,   name: Button 3, shape: circle, cx: 33, cy: 57, r: 10, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+  - {id: b4,   name: Button 4, shape: circle, cx: 57, cy: 57, r: 10, gestures: [press, double_press, long_press, long_press_repeat, long_press_release]}
+entities:
+  - slot: rotary
+    name: Dial
+    find: "_rotary$"
+    events:
+      clock_wise: {control: dial, gesture: turn_right, steps: steps, divide: 15}
+      counter_clock_wise: {control: dial, gesture: turn_left, steps: steps, divide: 15}
+  - slot: button_1
+    name: Button 1
+    find: "_button_1$"
+    events:
+      short_release: {control: b1, raw: tap}
+      long_press: {control: b1, gesture: long_press}
+      repeat: {control: b1, gesture: long_press_repeat}
+      long_release: {control: b1, gesture: long_press_release}
+  - slot: button_2
+    name: Button 2
+    find: "_button_2$"
+    events:
+      short_release: {control: b2, raw: tap}
+      long_press: {control: b2, gesture: long_press}
+      repeat: {control: b2, gesture: long_press_repeat}
+      long_release: {control: b2, gesture: long_press_release}
+  - slot: button_3
+    name: Button 3
+    find: "_button_3$"
+    events:
+      short_release: {control: b3, raw: tap}
+      long_press: {control: b3, gesture: long_press}
+      repeat: {control: b3, gesture: long_press_repeat}
+      long_release: {control: b3, gesture: long_press_release}
+  - slot: button_4
+    name: Button 4
+    find: "_button_4$"
+    events:
+      short_release: {control: b4, raw: tap}
+      long_press: {control: b4, gesture: long_press}
+      repeat: {control: b4, gesture: long_press_repeat}
+      long_release: {control: b4, gesture: long_press_release}

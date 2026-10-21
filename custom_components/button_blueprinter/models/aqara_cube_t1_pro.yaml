@@ -1,0 +1,39 @@
+# Aqara Cube T1 Pro (CTP-R01), through Zigbee2MQTT's own messages: Zigbee2MQTT
+# makes no event entity for it, and only its messages say which face landed up
+# ("side") and how far it turned ("action_angle", degrees, signed).
+# The cube has two modes (Zigbee2MQTT's "Operation mode"); both are mapped here:
+# - scene mode: flip_to_side / side_up (with side), rotate_left / rotate_right,
+#   shake, throw, hold. Checked on a real cube 2026-10-21 (it is in scene mode).
+# - action mode: flip90 / flip180 (with side and action_from_side), tap and slide
+#   (with side), rotate_left / rotate_right, shake, throw.
+# A face "lands face up" whenever the cube says which side is now on top.
+# [to check on the device] the sign of action_angle; the action name says the direction.
+id: aqara_cube_t1_pro
+name: Cube T1 Pro
+maker: Aqara
+input: zigbee2mqtt
+match: [CTP-R01]
+picture: {width: 132, height: 100, radius: 6, colour: "#f4f4f2", ink: "#444444"}
+looks: [label, icon]
+controls:
+  - {id: face_1, name: Face 1, shape: rect, x: 34, y: 3,  w: 30, h: 30, gestures: [face_up]}
+  - {id: face_2, name: Face 2, shape: rect, x: 2,  y: 35, w: 30, h: 30, gestures: [face_up]}
+  - {id: face_3, name: Face 3, shape: rect, x: 34, y: 35, w: 30, h: 30, gestures: [face_up]}
+  - {id: face_4, name: Face 4, shape: rect, x: 66, y: 35, w: 30, h: 30, gestures: [face_up]}
+  - {id: face_5, name: Face 5, shape: rect, x: 98, y: 35, w: 30, h: 30, gestures: [face_up]}
+  - {id: face_6, name: Face 6, shape: rect, x: 34, y: 67, w: 30, h: 30, gestures: [face_up]}
+  - {id: rotate, name: Rotate, shape: ring, cx: 113, cy: 17, r: 15, inner: 9, gestures: [turn_right, turn_left]}
+  - {id: cube, name: Cube, shape: circle, cx: 113, cy: 83, r: 14, gestures: [shake, throw, press, long_press, slide]}
+actions:
+  flip_to_side: &face {pick: side, controls: {1: face_1, 2: face_2, 3: face_3, 4: face_4, 5: face_5, 6: face_6}, gesture: face_up}
+  side_up: *face
+  flip90: *face
+  flip180: *face
+  # 30 degrees a step: a quarter turn is 3 steps.
+  rotate_right: {control: rotate, gesture: turn_right, steps: action_angle, divide: 30}
+  rotate_left: {control: rotate, gesture: turn_left, steps: action_angle, divide: 30}
+  shake: {control: cube, gesture: shake}
+  throw: {control: cube, gesture: throw}
+  hold: {control: cube, gesture: long_press}
+  tap: {control: cube, gesture: press}
+  slide: {control: cube, gesture: slide}

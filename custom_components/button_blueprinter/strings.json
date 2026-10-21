@@ -1,0 +1,47 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Button Blueprinter",
+        "description": "Show your switches room by room and choose what each button does. Add switches on the Button Blueprinter page in the sidebar."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Button Blueprinter is already set up."
+    }
+  },
+  "services": {
+    "press": {
+      "name": "Press",
+      "description": "Act as if a button was used: runs what that gesture is set to do (or logs it, in a dry run).",
+      "fields": {
+        "switch": {
+          "name": "Switch",
+          "description": "The switch's id, as shown on the page."
+        },
+        "control": {
+          "name": "Button",
+          "description": "The button or dial, e.g. b1."
+        },
+        "gesture": {
+          "name": "Gesture",
+          "description": "press, double_press, long_press, turn_right and so on."
+        },
+        "steps": {
+          "name": "Steps",
+          "description": "How far a dial turned. 1 if left out."
+        }
+      }
+    },
+    "put_back": {
+      "name": "Put back",
+      "description": "Put the lights a switch changed for now back the way they were, without waiting for its time to run out.",
+      "fields": {
+        "switch": {
+          "name": "Switch",
+          "description": "The switch's id, as shown on the page."
+        }
+      }
+    }
+  }
+}

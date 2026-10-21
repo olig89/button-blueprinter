@@ -1,0 +1,38 @@
+# Schneider Electric KNX Secure Push Button Dynamic Labelling Universal (MTN6194-6010S,
+# ETS app 1871 "Universal"): 8 buttons, four down each side of a display.
+# Buttons are numbered across: 1 2 / 3 4 / 5 6 / 7 8 (ETS Function N = button N).
+#
+# The display shows, beside each button, an icon and (optionally) the channel's
+# name. Each button has two looks, one for status on and one for status off, each
+# an icon from Schneider's set of 54 and a colour (white, green, blue, red,
+# orange, yellow). The status comes from the button's status object (here the
+# LED address). Icons, names and colours are ETS settings: the plate has no bus
+# object to change them, so here they show and plan what ETS has downloaded.
+id: schneider_mtn619x
+name: Push Button Dynamic Labelling, 8 buttons
+maker: Schneider Electric
+input: knx
+picture: {width: 86, height: 86, radius: 6, colour: "#2b2c2e", ink: "#f2f2f2"}
+knx:
+  tap: tap            # a telegram on the tap address is a finished short press
+  hold: long_press    # a telegram on the hold address is a hold
+  led: led
+icons: {set: schneider_dlife}
+display:
+  label_max: 12          # ETS "Name of the channel" is 96 bits
+  colours: [white, green, blue, red, orange, yellow]
+  show: [icon, icon_name, none]   # ETS "Indication type": icon only / icon + name / no icon
+  defaults: {show: icon, icon_on: bulb_on, icon_off: bulb_off, colour_on: white, colour_off: green}
+# Cells sit on the display beside their buttons (the page draws the buttons at the edges).
+controls:
+  - {id: b1, name: Button 1, shape: rect, x: 17.5, y: 6,    w: 25, h: 17, knx: 0, gestures: [press, double_press, long_press]}
+  - {id: b2, name: Button 2, shape: rect, x: 43.5, y: 6,    w: 25, h: 17, knx: 1, gestures: [press, double_press, long_press]}
+  - {id: b3, name: Button 3, shape: rect, x: 17.5, y: 25.5, w: 25, h: 17, knx: 2, gestures: [press, double_press, long_press]}
+  - {id: b4, name: Button 4, shape: rect, x: 43.5, y: 25.5, w: 25, h: 17, knx: 3, gestures: [press, double_press, long_press]}
+  - {id: b5, name: Button 5, shape: rect, x: 17.5, y: 45,   w: 25, h: 17, knx: 4, gestures: [press, double_press, long_press]}
+  - {id: b6, name: Button 6, shape: rect, x: 43.5, y: 45,   w: 25, h: 17, knx: 5, gestures: [press, double_press, long_press]}
+  - {id: b7, name: Button 7, shape: rect, x: 17.5, y: 64.5, w: 25, h: 17, knx: 6, gestures: [press, double_press, long_press]}
+  - {id: b8, name: Button 8, shape: rect, x: 43.5, y: 64.5, w: 25, h: 17, knx: 7, gestures: [press, double_press, long_press]}
+notes: >-
+  Double tap is timed by Button Blueprinter from two taps, so a button with a
+  double-tap binding waits a moment before its tap runs.

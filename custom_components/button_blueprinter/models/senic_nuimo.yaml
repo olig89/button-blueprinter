@@ -1,0 +1,50 @@
+# Senic Nuimo Control, through the nuimo integration (olig89/nuimo-control 0.2+):
+# one event entity with press, release, rotate (signed "delta": clockwise is
+# positive), swipes, touches, long touches, fly and proximity.
+# The button sends only press and release, so Button Blueprinter times tap,
+# double tap and hold itself. Turns arrive in 80 ms batches and may land just
+# after a later press: dial and top are separate controls, never combined.
+# [to check on the device] how much "delta" one comfortable click of turn is; 10 is a guess.
+id: senic_nuimo
+name: Nuimo Control
+maker: Senic
+input: event_entity
+picture: {width: 100, height: 100, radius: 50, colour: "#d9d9d6", ink: "#333333"}
+looks: [label, icon]
+controls:
+  - {id: ring, name: Ring, shape: ring, cx: 50, cy: 50, r: 48, inner: 38, gestures: [turn_right, turn_left]}
+  - id: top
+    name: Top
+    shape: circle
+    cx: 50
+    cy: 50
+    r: 36
+    gestures:
+      [press, double_press, long_press, long_press_repeat, long_press_release,
+       swipe_left, swipe_right, swipe_up, swipe_down,
+       touch_left, touch_right, touch_top, touch_bottom,
+       long_touch_left, long_touch_right, long_touch_top, long_touch_bottom,
+       fly_left, fly_right, proximity]
+entities:
+  - slot: control
+    name: Nuimo
+    find: "^event\\.nuimo"
+    events:
+      press: {control: top, raw: down}
+      release: {control: top, raw: up}
+      rotate: {control: ring, turn: delta, divide: 10}
+      swipe_left: {control: top, gesture: swipe_left}
+      swipe_right: {control: top, gesture: swipe_right}
+      swipe_up: {control: top, gesture: swipe_up}
+      swipe_down: {control: top, gesture: swipe_down}
+      touch_left: {control: top, gesture: touch_left}
+      touch_right: {control: top, gesture: touch_right}
+      touch_top: {control: top, gesture: touch_top}
+      touch_bottom: {control: top, gesture: touch_bottom}
+      long_touch_left: {control: top, gesture: long_touch_left}
+      long_touch_right: {control: top, gesture: long_touch_right}
+      long_touch_top: {control: top, gesture: long_touch_top}
+      long_touch_bottom: {control: top, gesture: long_touch_bottom}
+      fly_left: {control: top, gesture: fly_left}
+      fly_right: {control: top, gesture: fly_right}
+      proximity: {control: top, gesture: proximity}
