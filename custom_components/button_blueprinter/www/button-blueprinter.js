@@ -5,7 +5,7 @@
 // everything else to non-admins (switches, hand-written actions, modes, import, export).
 
 // Must match manifest.json (a test checks).
-const PAGE_VERSION = "0.7.2";
+const PAGE_VERSION = "0.7.3";
 
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -63,6 +63,7 @@ const FIELD_LABEL = {
   area: "Area to clean",
   mode: "Cleaning",
   colour: "Colour",
+  fade: "Fade (seconds)",
 };
 
 function s_label(sw, c) {
@@ -216,6 +217,7 @@ class ButtonBlueprinterPanel extends HTMLElement {
     if (binding.actions) return `Set by hand (${binding.actions.length} action${binding.actions.length === 1 ? "" : "s"})`;
     const m = binding.menu || {};
     const names = (ids) => (ids || []).map((e) => this._name(e)).join(", ");
+    const fade = m.fade !== undefined ? ` (fade ${m.fade} s)` : "";
     switch (m.kind) {
       case "toggle":
         return `Switch on or off: ${names(m.entities)}`;
@@ -226,11 +228,11 @@ class ButtonBlueprinterPanel extends HTMLElement {
       case "scene":
         return `Scene: ${this._name(m.scene)}${m.again_off ? " (again turns it off)" : ""}`;
       case "brighter":
-        return `Brighter by ${m.step || 10} %: ${names(m.entities)}`;
+        return `Brighter by ${m.step || 10} %: ${names(m.entities)}${fade}`;
       case "dimmer":
-        return `Dimmer by ${m.step || 10} %: ${names(m.entities)}`;
+        return `Dimmer by ${m.step || 10} %: ${names(m.entities)}${fade}`;
       case "colour":
-        return `${COMMAND[m.colour] || m.colour}: ${names(m.entities)}`;
+        return `${COMMAND[m.colour] || m.colour}: ${names(m.entities)}${fade}`;
       case "put_back":
         return "Put things back now";
       case "media":
@@ -647,6 +649,8 @@ class ButtonBlueprinterPanel extends HTMLElement {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((a) => `<option value="${esc(a.id)}" ${a.id === value ? "selected" : ""}>${esc(a.name)}</option>`)
         .join("")}</select></label>`;
+    if (type === "seconds")
+      return `<label>${esc(label)} <input type="number" min="0" max="10" step="0.1" data-val="${name}" value="${esc(value ?? "")}" placeholder="the light's own"></label>`;
     if (type === "bool") return `<label class="check"><input type="checkbox" data-bool="${name}" ${value ? "checked" : ""}> ${esc(label)}</label>`;
     if (type === "choice")
       return `<label>${esc(label)} <select data-val="${name}"><option value="">Choose…</option>${opts

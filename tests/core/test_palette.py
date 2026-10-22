@@ -111,3 +111,15 @@ def test_colour_keeps_brightness_and_has_white_back():
         check({"kind": "colour", "entities": ["light.lamp"], "colour": "indigo"})
     with pytest.raises(MenuError):
         check({"kind": "colour", "entities": ["switch.fan"], "colour": "red"})
+
+
+def test_fade_is_optional_and_becomes_the_transition():
+    plain = to_actions(check({"kind": "colour", "entities": ["light.lamp"], "colour": "blue"}))
+    assert "transition" not in plain[0]["data"]
+    quick = to_actions(check({"kind": "colour", "entities": ["light.lamp"], "colour": "blue", "fade": "0.1"}))
+    assert quick[0]["data"] == {"rgb_color": [0, 0, 255], "transition": 0.1}
+    dim = to_actions(check({"kind": "dimmer", "entities": ["light.lamp"], "fade": 0}))
+    assert dim[0]["data"]["transition"] == 0
+    assert check({"kind": "brighter", "entities": ["light.lamp"], "fade": ""}) == {"kind": "brighter", "entities": ["light.lamp"]}
+    with pytest.raises(MenuError, match="seconds"):
+        check({"kind": "colour", "entities": ["light.lamp"], "colour": "red", "fade": 30})

@@ -30,15 +30,17 @@ COLOURS: dict[str, dict[str, Any]] = {
 }
 
 # Field types: ("entities", domains) a list, ("entity", domains) one, ("percent",),
-# ("bool",), ("choice", values), ("area",) one Home Assistant area id.
+# ("bool",), ("choice", values), ("area",) one Home Assistant area id, ("seconds",)
+# an optional fade (left out: the light's own).
+MAX_FADE = 10
 MENU: dict[str, tuple[str, dict[str, tuple]]] = {
     "toggle": ("Switch on or off", {"entities": ("entities", SWITCHABLE)}),
     "turn_on": ("Switch on", {"entities": ("entities", SWITCHABLE), "brightness": ("percent",)}),
     "turn_off": ("Switch off", {"entities": ("entities", SWITCHABLE)}),
     "scene": ("Scene", {"scene": ("entity", ("scene",)), "again_off": ("bool",)}),
-    "brighter": ("Brighter", {"entities": ("entities", ("light",)), "step": ("percent",)}),
-    "dimmer": ("Dimmer", {"entities": ("entities", ("light",)), "step": ("percent",)}),
-    "colour": ("Colour", {"entities": ("entities", ("light",)), "colour": ("choice", tuple(COLOURS))}),
+    "brighter": ("Brighter", {"entities": ("entities", ("light",)), "step": ("percent",), "fade": ("seconds",)}),
+    "dimmer": ("Dimmer", {"entities": ("entities", ("light",)), "step": ("percent",), "fade": ("seconds",)}),
+    "colour": ("Colour", {"entities": ("entities", ("light",)), "colour": ("choice", tuple(COLOURS)), "fade": ("seconds",)}),
     # For a switch that puts things back (putback.py): do it now.
     "put_back": ("Put things back now", {}),
     "media": ("Speaker", {"entity": ("entity", ("media_player",)), "command": ("choice", MEDIA_COMMANDS)}),
@@ -94,6 +96,16 @@ def check(choice: Any) -> dict[str, Any]:
             if not 1 <= pct <= 100:
                 raise MenuError("Use a number from 1 to 100")
             out[name] = int(pct) if pct == int(pct) else pct
+        elif kind_of == "seconds":
+            if value is None or value == "":
+                continue
+            try:
+                secs = float(value)
+            except (TypeError, ValueError) as err:
+                raise MenuError(f"Use a number of seconds from 0 to {MAX_FADE}") from err
+            if not 0 <= secs <= MAX_FADE:
+                raise MenuError(f"Use a number of seconds from 0 to {MAX_FADE}")
+            out[name] = int(secs) if secs == int(secs) else round(secs, 2)
         elif kind_of == "bool":
             out[name] = bool(value)
         elif kind_of == "area":
@@ -115,6 +127,11 @@ def _toggle(entities: list[str]) -> list[dict]:
             "else": [{"action": "homeassistant.turn_on", "target": {"entity_id": list(entities)}}],
         }
     ]
+
+
+def _fade(choice: dict[str, Any]) -> dict[str, Any]:
+    """A chosen fade as the light's transition; none chosen: the light's own."""
+    return {"transition": choice["fade"]} if "fade" in choice else {}
 
 
 def to_actions(choice: dict[str, Any]) -> list[dict]:
@@ -141,14 +158,14 @@ def to_actions(choice: dict[str, Any]) -> list[dict]:
             {
                 "action": "light.turn_on",
                 "target": {"entity_id": choice["entities"]},
-                "data": {"brightness_step_pct": f"{{{{ {sign}{step} * (steps | int(1)) }}}}"},
+                "data": {"brightness_step_pct": f"{{{{ {sign}{step} * (steps | int(1)) }}}}", **_fade(choice)},
             }
         ]
     if kind == "put_back":
         return [{"action": "button_blueprinter.put_back", "data": {"switch": "{{ switch }}"}}]
     if kind == "colour":
         # Keeps the brightness; a light that is off comes on at its last brightness.
-        return [{"action": "light.turn_on", "target": {"entity_id": choice["entities"]}, "data": dict(COLOURS[choice["colour"]])}]
+        return [{"action": "light.turn_on", "target": {"entity_id": choice["entities"]}, "data": {**COLOURS[choice["colour"]], **_fade(choice)}}]
     if kind == "scene":
         scene = choice["scene"]
         on = [{"action": "scene.turn_on", "target": {"entity_id": scene}}]
