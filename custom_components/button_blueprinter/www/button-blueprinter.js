@@ -5,7 +5,7 @@
 // everything else to non-admins (switches, hand-written actions, modes, import, export).
 
 // Must match manifest.json (a test checks).
-const PAGE_VERSION = "0.7.3";
+const PAGE_VERSION = "0.7.4";
 
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
