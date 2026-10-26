@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "button_blueprinter"
 NAME = "Button Blueprinter"
-VERSION = "0.7.3"  # also manifest.json and www/button-blueprinter.js (a test checks)
+VERSION = "0.7.4"  # also manifest.json and www/button-blueprinter.js (a test checks)
 
 STORAGE_KEY = DOMAIN
 STORAGE_VERSION = 1
