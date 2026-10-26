@@ -77,23 +77,23 @@ def test_unknown_actions_are_not_a_menu_choice():
 
 
 def test_vacuum_cleans_the_area_in_its_mode_or_sends_it_home():
-    acts = to_actions(check({"kind": "vacuum", "vacuum": "vacuum.hoovie", "area": "kitchen", "mode": "vac_and_mop"}))
+    acts = to_actions(check({"kind": "vacuum", "vacuum": "vacuum.robot", "area": "kitchen", "mode": "vac_and_mop"}))
     step = acts[0]
-    assert step["if"] == [{"condition": "state", "entity_id": "vacuum.hoovie", "state": "cleaning"}]
-    assert step["then"] == [{"action": "vacuum.return_to_base", "target": {"entity_id": "vacuum.hoovie"}}]
+    assert step["if"] == [{"condition": "state", "entity_id": "vacuum.robot", "state": "cleaning"}]
+    assert step["then"] == [{"action": "vacuum.return_to_base", "target": {"entity_id": "vacuum.robot"}}]
     mode, clean = step["else"]
-    assert mode["then"][0]["target"] == {"entity_id": "select.hoovie_cleaning_mode"}
+    assert mode["then"][0]["target"] == {"entity_id": "select.robot_cleaning_mode"}
     assert mode["then"][0]["data"] == {"option": "vac_and_mop"}
-    assert "select.hoovie_cleaning_mode" in mode["if"][0]["value_template"]
-    assert clean == {"action": "vacuum.clean_area", "target": {"entity_id": "vacuum.hoovie"}, "data": {"cleaning_area_id": ["kitchen"]}}
+    assert "select.robot_cleaning_mode" in mode["if"][0]["value_template"]
+    assert clean == {"action": "vacuum.clean_area", "target": {"entity_id": "vacuum.robot"}, "data": {"cleaning_area_id": ["kitchen"]}}
 
 
 @pytest.mark.parametrize(
     "bad",
     [
-        {"kind": "vacuum", "vacuum": "vacuum.hoovie", "area": "kitchen", "mode": "polish"},
-        {"kind": "vacuum", "vacuum": "vacuum.hoovie", "area": "", "mode": "vacuum"},
-        {"kind": "vacuum", "vacuum": "vacuum.hoovie", "area": "Kitchen'}}", "mode": "vacuum"},
+        {"kind": "vacuum", "vacuum": "vacuum.robot", "area": "kitchen", "mode": "polish"},
+        {"kind": "vacuum", "vacuum": "vacuum.robot", "area": "", "mode": "vacuum"},
+        {"kind": "vacuum", "vacuum": "vacuum.robot", "area": "Kitchen'}}", "mode": "vacuum"},
         {"kind": "vacuum", "vacuum": "light.a", "area": "kitchen", "mode": "vacuum"},
     ],
 )

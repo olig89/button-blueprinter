@@ -47,7 +47,7 @@ def test_insert_steps_name_the_insert():
 
 
 def test_wanted_looks_are_checked_like_looks():
-    s = Switch(id="o", name="Office", model="schneider_mtn619x", knx={"tap": "6/0/0"}, wanted={"b1": {"look": {"colour_on": "purple"}}})
+    s = Switch(id="o", name="Office", model="schneider_mtn619x", knx={"tap": "6/0/60"}, wanted={"b1": {"look": {"colour_on": "purple"}}})
     with pytest.raises(SwitchError, match="colours are"):
         check(s, EIGHT, icon_sets())
     s.wanted = {"b1": {"look": {"colour_on": "blue"}, "by": "Alex"}}

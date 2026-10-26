@@ -74,7 +74,7 @@ async def test_anyone_may_ask_for_a_look_but_only_admins_finish(house, hass_ws_c
 
 
 async def test_a_vacuum_binding_is_a_valid_home_assistant_script(house, hass_ws_client, hass, hass_read_only_access_token):
-    menu = {"kind": "vacuum", "vacuum": "vacuum.hoovie", "area": "kitchen", "mode": "vac_and_mop"}
+    menu = {"kind": "vacuum", "vacuum": "vacuum.robot", "area": "kitchen", "mode": "vac_and_mop"}
     compiled = await house.bp._async_compile({"menu": menu})
     assert compiled[0]["then"][0]["action"] == "vacuum.return_to_base"
 
@@ -97,7 +97,7 @@ async def test_a_vacuum_binding_is_a_valid_home_assistant_script(house, hass_ws_
 
 
 async def test_in_ets_marks_requests_and_a_download_ticks_off_only_those(house, hass_ws_client, hass, hass_read_only_access_token):
-    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/0", "hold": "6/1/0"}})
+    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/60", "hold": "6/1/60"}})
     admin = await hass_ws_client(hass)
 
     async def send(**msg):

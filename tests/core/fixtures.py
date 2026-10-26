@@ -64,7 +64,7 @@ SMALL_BATHROOM = {
     "max": 10,
 }
 
-STAIRS_LAMPS = ["light.stairs_hanging_lamp_left", "light.stairs_hanging_lamp_middle", "light.stairs_hanging_lamp_right"]
+STAIRS_LAMPS = ["light.hall_pendant_left", "light.hall_pendant_middle", "light.hall_pendant_right"]
 ANY_ON_TOGGLE = {
     "if": [{"condition": "state", "entity_id": STAIRS_LAMPS, "state": "on", "match": "any"}],
     "then": [{"action": "light.turn_off", "target": {"entity_id": STAIRS_LAMPS}}],
@@ -74,7 +74,7 @@ ANY_ON_TOGGLE = {
 OFFICE = {
     "id": "1000000000002",
     "alias": "Wall buttons: Office (1.1.32)",
-    "triggers": [_tap("6/0/0", "b1"), _tap("6/0/2", "b3"), _tap("6/0/4", "b5")],
+    "triggers": [_tap("6/0/60", "b1"), _tap("6/0/62", "b3"), _tap("6/0/64", "b5")],
     "actions": [
         {
             "if": [{"condition": "template", "value_template": "{{ last_used == pressed }}"}],

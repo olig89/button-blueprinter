@@ -45,7 +45,7 @@ def test_reads_the_small_bathroom_automation():
 
 
 def test_the_office_automation_is_not_simple_and_says_so():
-    office = {"tap": "6/0/0", "hold": "6/1/0", "led": "6/2/0"}
+    office = {"tap": "6/0/60", "hold": "6/1/60", "led": "6/2/60"}
     bindings, notes = knx.read_automation(model("schneider_mtn619x"), office, OFFICE)
     assert bindings == {}
     assert any("choose" in n for n in notes)

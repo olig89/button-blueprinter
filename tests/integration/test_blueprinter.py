@@ -201,7 +201,7 @@ async def test_office_scene_again_turns_off(house, hass: HomeAssistant):
             "name": "Office",
             "model": "schneider_mtn619x",
             "mode": "live",
-            "knx": {"tap": "6/0/0", "hold": "6/1/0", "led": "6/2/0"},
+            "knx": {"tap": "6/0/60", "hold": "6/1/60", "led": "6/2/60"},
             "bindings": {
                 "b1": {"press": {"menu": {"kind": "scene", "scene": "scene.office_bright", "again_off": True}}},
                 "b5": {"press": {"menu": {"kind": "scene", "scene": "scene.office_dark", "again_off": True}}},
@@ -209,10 +209,10 @@ async def test_office_scene_again_turns_off(house, hass: HomeAssistant):
         }
     )
     hass.states.async_set("light.small_bathroom_ceiling", "on")
-    house.bp.handle_telegram("6/0/0", "GroupValueWrite")  # bright was used last and its light is on -> off
+    house.bp.handle_telegram("6/0/60", "GroupValueWrite")  # bright was used last and its light is on -> off
     await hass.async_block_till_done()
     assert house.services("homeassistant", "turn_off")[-1] == {"entity_id": ["light.small_bathroom_ceiling"]}
-    house.bp.handle_telegram("6/0/4", "GroupValueWrite")  # dark wasn't last -> turn it on
+    house.bp.handle_telegram("6/0/64", "GroupValueWrite")  # dark wasn't last -> turn it on
     await hass.async_block_till_done()
     assert house.services("scene", "turn_on")[-1] == {"entity_id": ["scene.office_dark"]}
 
@@ -301,7 +301,7 @@ async def test_real_knx_trigger_delivers_presses(house, hass: HomeAssistant):
 
 async def test_apply_looks_by_plate_address(house):
     await small_bathroom(house)
-    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/0", "led": "6/2/0", "address": "1.1.32"}})
+    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/60", "led": "6/2/60", "address": "1.1.32"}})
     got = await house.bp.async_apply_looks(
         {
             "1.1.32": {"b3": {"label": "Button 3", "show": "icon", "icon_on": "working", "icon_off": "working", "colour_on": "green", "colour_off": "white"}},
@@ -317,7 +317,7 @@ async def test_apply_looks_by_plate_address(house):
 
 
 async def test_wanted_looks_wait_for_ets_and_clear_themselves(house):
-    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/0", "led": "6/2/0", "address": "1.1.32"}})
+    await house.bp.async_save_switch({"name": "Office", "model": "schneider_mtn619x", "knx": {"tap": "6/0/60", "led": "6/2/60", "address": "1.1.32"}})
     plate = {"label": "Button 3", "show": "icon", "icon_on": "working", "icon_off": "working", "colour_on": "green", "colour_off": "white"}
     await house.bp.async_apply_looks({"1.1.32": {"b3": plate}})
     wanted = {**plate, "label": "Dimmed", "show": "icon_name"}

@@ -71,7 +71,7 @@ def test_inserts_come_from_the_insert_sheets():
 
 
 def office(looks):
-    return Switch(id="o", name="Office", model="schneider_mtn619x", knx={"tap": "6/0/0", "led": "6/2/0"}, looks=looks)
+    return Switch(id="o", name="Office", model="schneider_mtn619x", knx={"tap": "6/0/60", "led": "6/2/60"}, looks=looks)
 
 
 def test_display_looks_are_what_the_plate_can_show():
